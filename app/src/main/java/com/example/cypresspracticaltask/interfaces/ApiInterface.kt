@@ -1,6 +1,7 @@
 package com.example.cypresspracticaltask.interfaces
 
 import com.example.cypresspracticaltask.models.Album
+import com.example.cypresspracticaltask.models.ImageModel
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Query
@@ -16,6 +17,6 @@ interface ApiInterface {
         @Query("count") count: Int
     ): Response<List<Album>>
 
-//    @GET("/photos")
-//    suspend fun getPhotosOfAnAlbum()
+    @GET("/photos")
+    suspend fun getImagesOfAnAlbum(@Query("albumId") albumId: Long): Response<List<ImageModel>>
 }
