@@ -6,13 +6,9 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
 import com.example.cypresspracticaltask.R
 import com.example.cypresspracticaltask.databinding.AlbumAdapterItemBinding
 import com.example.cypresspracticaltask.models.Album
-import com.example.cypresspracticaltask.models.ImageModel
-import com.example.cypresspracticaltask.repositories.AlbumRepository
-import kotlinx.coroutines.*
 
 class AlbumsAdapter() :
     RecyclerView.Adapter<AlbumsAdapter.AlbumsViewHolder>() {
@@ -44,6 +40,16 @@ class AlbumsAdapter() :
         holder.binding.albumImagesRecycler.layoutManager =
             LinearLayoutManager(holder.itemView.context, LinearLayoutManager.HORIZONTAL, false)
         holder.binding.albumImagesRecycler.adapter = ImageAdapter(album?.imageList)
+
+        if ((album?.imageList ?: 0) == 0) {
+            holder.binding.imageShimmer.visibility = View.VISIBLE
+            holder.binding.imageShimmer.startShimmer()
+            holder.binding.albumImagesRecycler.visibility = View.INVISIBLE
+        } else {
+            holder.binding.imageShimmer.visibility = View.GONE
+            holder.binding.imageShimmer.stopShimmer()
+            holder.binding.albumImagesRecycler.visibility = View.VISIBLE
+        }
     }
 
     override fun getItemCount(): Int {

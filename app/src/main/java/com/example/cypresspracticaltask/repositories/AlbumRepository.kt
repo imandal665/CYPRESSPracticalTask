@@ -1,6 +1,5 @@
 package com.example.cypresspracticaltask.repositories
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.cypresspracticaltask.interfaces.ApiInterface
@@ -8,16 +7,16 @@ import com.example.cypresspracticaltask.models.Album
 import com.example.cypresspracticaltask.models.ImageModel
 import com.example.cypresspracticaltask.roomDb.AlbumDao
 
-class AlbumRepository(private val apiInterface: ApiInterface, private val albumDao: AlbumDao) {
+class AlbumRepository(
+    private val apiInterface: ApiInterface,
+    private val albumDao: AlbumDao
+) {
 
     private val latestAlbumsLiveData = MutableLiveData<List<Album>>()
     private val latestImagesLiveData = MutableLiveData<List<ImageModel>>()
 
     val latestAlbums: LiveData<List<Album>>
         get() = latestAlbumsLiveData
-
-//    val latestImages: LiveData<List<ImageModel>>
-//        get() = latestImagesLiveData
 
     var savedAlbumsLiveData: LiveData<List<Album>> = albumDao.getAllAlbum()
 
@@ -40,17 +39,14 @@ class AlbumRepository(private val apiInterface: ApiInterface, private val albumD
                 latestImagesLiveData.postValue(items.subList(0, 4))
                 latestAlbumsLiveData.value?.forEach {
                     if (it.id == albumId) {
-                        it.imageList = items
-                        albumDao.addAlbum(it)
+                        if (it.imageList.isNullOrEmpty()) {
+                            it.imageList = items
+                            albumDao.addAlbum(it)
+                        }
                     }
                 }
             }
         }
     }
-
-//    suspend fun getAlbumsFromDb() {
-//        savedAlbumsLiveData = albumDao.getAllAlbum()
-//        Log.d("savedAlbumsLiveData", savedAlbumsLiveData!!.value?.size.toString())
-//    }
 
 }
